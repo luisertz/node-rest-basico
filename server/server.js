@@ -26,7 +26,7 @@ mongoose.connect(process.env.urlDB,
 
         if (err) throw err;
 
-        console.log('Base de datos conectada')
+        console.log('Base de datos conectada!')
     });
 
 app.listen(process.env.PORT, () => {
