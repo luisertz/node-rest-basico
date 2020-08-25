@@ -4,9 +4,16 @@ const _ = require('underscore');
 const Usuario = require('../models/usuario');
 
 const app = express();
+const { verificaToken } = require('../middlewares/autentication')
+const { verificaAdmin } = require('../middlewares/autentication')
 
+app.get('/usuario', verificaToken, (req, res) => {
 
-app.get('/usuario', function (req, res) {
+    //return res.json({
+    //  usuario: req.usuario,
+    //nombre: req.usuario.nombre,
+    //email: req.usuario.email,
+    //})
 
     let desde = req.query.desde || 0; //Si no viene la variable "desde" entonces comienza de la pagina 1
     desde = Number(desde); //transforma la variable "desde" a numero
@@ -41,7 +48,7 @@ app.get('/usuario', function (req, res) {
 
 });
 
-app.post('/usuario', function (req, res) {
+app.post('/usuario', [verificaToken, verificaAdmin], function (req, res) {
     let body = req.body;
 
     let usuario = new Usuario({
@@ -72,7 +79,7 @@ app.post('/usuario', function (req, res) {
 });
 
 
-app.put('/usuario/:id', function (req, res) {
+app.put('/usuario/:id', [verificaToken, verificaAdmin], function (req, res) {
     let id = req.params.id;
     let body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'estado']);
 
@@ -97,7 +104,7 @@ app.put('/usuario/:id', function (req, res) {
 
 });
 
-app.delete('/usuario/:id', function (req, res) {
+app.delete('/usuario/:id', [verificaToken, verificaAdmin], function (req, res) {
 
     let id = req.params.id;
 
